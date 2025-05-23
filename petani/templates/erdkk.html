@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen"
+     x-data="{ step: 1, openIndex: null }">
+
+    <!-- Header Mobile -->
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
+        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+            <span>GAPOKTAN</span>
+        </h1>
+        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+<h1 class="text-2xl font-bold mb-6 text-gray-800">Data ERDKK</h1>
+
+<div class="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-green-800 text-white">
+            <tr>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">No</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Petani</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Komoditas</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Luas (Ha)</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Jenis Pupuk</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Jumlah (Kg)</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold uppercase">Tahun</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for data in daftar_erdkk %}
+            <tr>
+                <td class="px-4 py-2">{{ forloop.counter }}</td>
+                <td class="px-4 py-2">{{ data.petani.nama }}</td>
+                <td class="px-4 py-2">{{ data.komoditas }}</td>
+                <td class="px-4 py-2">{{ data.luas_lahan }}</td>
+                <td class="px-4 py-2">{{ data.jenis_pupuk }}</td>
+                <td class="px-4 py-2">{{ data.jumlah_kebutuhan }}</td>
+                <td class="px-4 py-2">{{ data.tahun_rencana }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center py-4 text-gray-500">Data belum tersedia</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

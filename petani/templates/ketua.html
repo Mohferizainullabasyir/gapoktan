@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="min-h-screen bg-gradient-to-br from-green-100 via-blue-200 to-green-300 p-6">
+    <!-- Header -->
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded shadow">
+        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+            <span>GAPOKTAN</span>
+        </h1>
+        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Title -->
+    <header class="mb-8 text-center">
+        <h1 class="text-4xl font-extrabold text-green-900 drop-shadow">Ketua Kelompok Tani Kecamatan Mlandingan</h1>
+        <p class="text-gray-700 text-lg">Menampilkan informasi ketua poktan dan gapoktan.</p>
+    </header>
+
+    <!-- Search Form -->
+    <form method="get" action="" class="mb-6 flex justify-center">
+        <input type="text" name="q" placeholder="Cari nama atau grup..." 
+            value="{{ request.GET.q }}" 
+            class="p-3 border border-green-400 rounded-l-md w-full max-w-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/30 backdrop-blur-md text-green-900 placeholder-green-800">
+        <button type="submit" class="bg-green-600 text-white px-5 rounded-r-md hover:bg-green-700 transition shadow">Cari</button>
+        {% if request.GET.q %}
+        <a href="{% url 'ketua' %}" class="ml-2 bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition shadow">Reset</a>
+        {% endif %}
+    </form>
+
+    <!-- Ketua Poktan -->
+    <div class="backdrop-blur-md bg-white/40 rounded-xl shadow-xl p-6 border border-white/20 max-w-6xl mx-auto mb-10">
+        <h2 class="text-2xl font-bold mb-6 text-center text-green-800 drop-shadow">Daftar Ketua Poktan</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto text-left border-separate border-spacing-y-2">
+                <thead>
+                    <tr class="bg-green-200/60 text-green-900">
+                        <th class="p-3">Nama</th>
+                        <th class="p-3">Grup</th>
+                        <th class="p-3">NIK</th>
+                        <th class="p-3">No. HP</th>
+                        <th class="p-3">Alamat</th>
+                    </tr>
+                </thead>
+                {% for row in poktan %}
+                <tbody>
+                    <tr class="hover:bg-green-100/50 transition backdrop-blur-md bg-white/30">
+                        <td class="p-3">{{ row.nama }}</td>
+                        <td class="p-3">
+                            {% for g in row.grup.all %}
+                                <span class="inline-block bg-green-200 text-green-800 px-2 py-1 rounded-full text-sm mr-1 mb-1">{{ g.nama }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="p-3">{{ row.nik_tersembunyi }}</td>
+                        <td class="p-3">{{ row.no_hp }}</td>
+                        <td class="p-3">{{ row.alamat|safe }}</td>
+                    </tr>
+                </tbody>
+                {% empty %}
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="text-center text-red-500 italic p-3">Data Ketua Poktan tidak ditemukan.</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Ketua Gapoktan -->
+    <div class="backdrop-blur-md bg-white/40 rounded-xl shadow-xl p-6 border border-white/20 max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6 text-center text-blue-800 drop-shadow">Daftar Ketua Gapoktan</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto text-left border-separate border-spacing-y-2">
+                <thead>
+                    <tr class="bg-blue-200/60 text-blue-900">
+                        <th class="p-3">Nama</th>
+                        <th class="p-3">Grup</th>
+                        <th class="p-3">NIK</th>
+                        <th class="p-3">No. HP</th>
+                        <th class="p-3">Alamat</th>
+                    </tr>
+                </thead>
+                {% for row in gapoktan %}
+                <tbody>
+                    <tr class="hover:bg-blue-100/50 transition backdrop-blur-md bg-white/30">
+                        <td class="p-3">{{ row.nama }}</td>
+                        <td class="p-3 text-blue-900 font-semibold">{{ row.grup.nama }}</td>
+                        <td class="p-3">{{ row.nik_tersembunyi }}</td>
+                        <td class="p-3">{{ row.no_hp }}</td>
+                        <td class="p-3">{{ row.alamat|safe }}</td>
+                    </tr>
+                </tbody>
+                {% empty %}
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="text-center text-red-500 italic p-3">Data Ketua Gapoktan tidak ditemukan.</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

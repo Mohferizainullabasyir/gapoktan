@@ -1,0 +1,206 @@
+from django.db import models
+from ckeditor.fields import RichTextField
+from django.utils.text import slugify
+from datetime import date
+from django.utils import timezone 
+from django.contrib.auth.models import User
+
+class ProfilGapoktan(models.Model):
+    nama_instansi = models.CharField(max_length=100, default="Gapoktan Mlandingan")
+    gambar_kantor = models.ImageField(upload_to='gambar/profil/kantor/', null=True, blank=True)
+    deskripsi_kantor = RichTextField(null=True, blank=True)
+    gambar_ketua = models.ImageField(upload_to='gambar/profil/ketua/', null=True, blank=True)
+    deskripsi_ketua = RichTextField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Data Profil Gapoktan"
+
+    def __str__(self):
+        return self.nama_instansi
+    
+class Kegiatan(models.Model):
+    judul = models.CharField(max_length=200)
+    tanggal = models.DateField()
+    deskripsi = models.TextField()
+    gambar = models.ImageField(upload_to='kegiatan/', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.judul} ({self.tanggal.strftime('%d-%m-%Y')})"
+
+    class Meta:
+        verbose_name = "Kegiatan"
+        verbose_name_plural = "Data Kegiatan"
+        ordering = ['-tanggal']
+
+
+
+class Grup(models.Model):
+    nama = models.CharField(max_length=100, unique=True)
+    aktif = models.BooleanField(default=True)
+    slug = models.SlugField(max_length=200, null=True,blank=True, unique=True)
+
+    
+    class Meta:
+        verbose_name_plural ="Data Grup"
+        
+    def __str__(self):
+        return self.nama
+
+
+class KetuaKelompok(models.Model):
+    grup = models.ManyToManyField(Grup, related_name='ketua')
+    nama = models.CharField(max_length=100)
+    nik = models.CharField(max_length=100, default="0000000000000000")
+    no_hp = models.CharField(max_length=15)
+    alamat = RichTextField(blank=True, null=True)
+    
+    class Meta:
+        verbose_name_plural ="Data Ketua Kelompok"
+        
+    def __str__(self):
+        return self.nama
+    
+    def nik_tersembunyi(self):
+        return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
+    
+class KetuaGapoktan(models.Model):
+    grup = models.ForeignKey(Grup, on_delete=models.CASCADE, related_name='ketua_gapoktan')
+    nama = models.CharField(max_length=100)
+    nik = models.CharField(max_length=100, default="0000000000000000")
+    no_hp = models.CharField(max_length=15)
+    alamat = RichTextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Ketua Gapoktan"
+
+    def __str__(self):
+        return self.nama
+
+    def nik_tersembunyi(self):
+        return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
+    
+
+class Petani(models.Model):
+    grup = models.ForeignKey(Grup, on_delete=models.CASCADE, related_name='anggota')
+    nama = models.CharField(max_length=100)
+    nik = models.CharField(max_length=100, default="0000000000000000")
+    no_hp = models.CharField(max_length=15)
+    alamat = RichTextField(blank=True, null=True)
+    created_at = models.DateField(default=timezone.now) 
+    
+    class Meta:
+        verbose_name_plural ="Data Petani"
+    
+    def __str__(self):
+        return self.nama
+    
+    def nik_tersembunyi(self):
+        return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
+    
+    
+    
+class Alsintan(models.Model):
+    STATUS_CHOICES = [
+        ('tersedia', 'Tersedia'),
+        ('dipinjam', 'Dipinjam'),
+        ('rusak', 'Rusak'),
+    ]
+
+    nama_alat = models.CharField(max_length=100)
+    jenis_alat = models.CharField(max_length=100)
+    jumlah = models.PositiveIntegerField(default=1)
+    kondisi = models.CharField(max_length=10, choices=STATUS_CHOICES, default='tersedia')
+    tanggal_pengadaan = models.DateField()
+    sumber_dana = models.CharField(max_length=100, blank=True, null=True)
+    dokumentasi = models.ImageField(upload_to='gambar/alsintan/', blank=True, null=True)
+    keterangan = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Data Alsintan"
+
+    def __str__(self):
+        return f"{self.nama_alat} - {self.jenis_alat}"
+
+class Lahan(models.Model):
+    pemilik = models.ForeignKey(Petani, on_delete=models.CASCADE)
+    gambar_lahan = models.ImageField(upload_to='gambar/lahan', blank=False, null=True)
+    luas = models.CharField(max_length=20) 
+    jenis_tanaman = models.CharField(max_length=100)
+    lokasi = RichTextField(blank=True, null=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    slug = models.SlugField(max_length=200, null=True,blank=True, unique=True)
+    created_at = models.DateField(default=timezone.now) 
+    
+    class Meta:
+        verbose_name_plural ="Data Lahan"
+        
+    def __str__(self):
+        return self.pemilik.nama
+    
+class DataERDKK(models.Model):
+    JENIS_PUPUK_CHOICES = [
+    ('NPK', 'NPK'),
+    ('UREA', 'Urea'),
+    ('ORGANIK', 'Organik'),
+    ]
+    petani = models.ForeignKey('Petani', on_delete=models.CASCADE)
+    komoditas = models.CharField(max_length=100)
+    luas_lahan = models.CharField(max_length=20)
+    jenis_pupuk = models.CharField(
+        max_length=20,
+        choices=JENIS_PUPUK_CHOICES,
+        default='NPK'  # kasih default biar migrasi lancar
+    )
+    jumlah_kebutuhan = models.CharField(max_length=20)
+    tahun_rencana = models.PositiveIntegerField(default=date.today().year)
+    catatan = RichTextField(blank=True, null=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Data ERDKK"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"{self.petani.nama}-{self.komoditas}-{self.tahun_rencana}")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.petani.nama} - {self.komoditas} ({self.tahun_rencana})"
+
+
+    
+class KesehatanTanaman(models.Model):
+    lahan = models.ForeignKey(Lahan, on_delete=models.CASCADE)
+    kondisi = models.CharField(max_length=100)
+    gambar_tanaman = models.ImageField(upload_to='gambar/tanaman', blank=False, null=True)
+    isi_penyakit_dan_tindakan = RichTextField(blank=True, null=True)
+    
+    class Meta:
+        verbose_name_plural ="Data Kesehatan Tanaman"
+        
+class ForumDiskusi(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forum_diskusi')
+    judul = models.CharField(max_length=200)
+    isi = models.TextField()
+    tanggal = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Forum Diskusi"
+
+    def __str__(self):
+        return self.judul
+
+
+class KomentarDiskusi(models.Model):
+    forum = models.ForeignKey(ForumDiskusi, on_delete=models.CASCADE, related_name='komentar')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='komentar_diskusi')
+    isi = models.TextField()
+    tanggal = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Komentar Diskusi"
+
+    def __str__(self):
+        return f"Komentar oleh {self.user.username} di {self.forum.judul}"

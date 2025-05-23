@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- ALPINE.JS CONTAINER -->
+<div x-data="{ step: 1, openIndex: null, images: [] }"
+     class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen">
+
+    <!-- Header Mobile -->
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
+        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+            <span>GAPOKTAN</span>
+        </h1>
+        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Header + Tombol Map -->
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+        <div class="text-center md:text-left">
+            <h1 class="text-4xl font-extrabold text-green-900 drop-shadow-lg">Monitoring Lahan</h1>
+            <p class="text-lg text-green-700 mt-2">Pantau & Kelola Data Lahan dengan Mudah</p>
+        </div>
+        <button @click="step = 3"
+            class="mt-4 md:mt-0 bg-white text-green-700 border border-green-500 px-5 py-2 rounded-lg hover:bg-green-100 transition shadow">
+            📍 Lihat Peta
+        </button>
+    </div>
+
+    <!-- Step 1: Daftar Lahan -->
+    <div x-show="step === 1" x-transition class="p-6 rounded-lg max-w-5xl mx-auto w-full">
+        <h2 class="text-2xl font-bold text-green-800 mb-6">📄 Daftar Lahan Gapoktan</h2>
+
+        <form method="get" action="" class="mb-6 flex flex-wrap items-center justify-center gap-4">
+            <input type="text" name="q" placeholder="Cari pemilik, jenis, lokasi..." value="{{ request.GET.q }}"
+                class="p-3 rounded-lg border w-full md:w-1/2 focus:ring-2 focus:ring-green-500 placeholder-green-600 text-green-800 shadow-sm" />
+            <button type="submit"
+                class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow">Cari</button>
+            {% if request.GET.q %}
+            <a href="{% url 'lahan' %}"
+                class="bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition shadow">Reset</a>
+            {% endif %}
+        </form>
+
+        {% if lahan %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for row in lahan %}
+            <div
+                class="bg-green-50 rounded-lg p-4 shadow hover:shadow-xl transition-transform transform hover:scale-105">
+                <img src="{{ row.gambar_lahan.url }}" alt="Lahan"
+                    class="w-full h-40 object-cover rounded mb-3 border border-green-300 cursor-pointer"
+                    @click="images = [...document.querySelectorAll('.grid img')].map(img => img.src); openIndex = {{ forloop.counter0 }}">
+                <h3 class="text-lg font-bold text-green-900">👨‍🌾 {{ row.pemilik }}</h3>
+                <p class="text-green-700">Luas: {{ row.luas }}</p>
+                <p class="text-green-700">Jenis: {{ row.jenis_tanaman }}</p>
+                <p class="text-green-700">Lokasi: {{ row.lokasi|safe }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-gray-600 mt-10">Data lahan belum tersedia.</p>
+        {% endif %}
+    </div>
+
+    <!-- Step 2: Form Tambah -->
+    <div x-show="step === 2" x-transition class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+        <button @click="step = 1" class="mb-4 text-sm text-green-700 hover:text-green-900 flex items-center">
+            ⬅️ Kembali ke daftarr
+        </button>
+        <h2 class="text-2xl font-bold text-green-800 mb-6">➕ Tambah Lahan Baru</h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'tambah_lahan' %}">
+            {% csrf_token %}
+            <input type="file" name="gambar" class="w-full mb-3 border p-2 rounded-lg shadow" required>
+            <select name="pemilik" required class="w-full mb-3 border p-2 rounded-lg shadow">
+                <option value="" disabled selected>Pilih Pemilik</option>
+                {% for petani in daftar_petani %}
+                <option value="{{ petani.id }}">{{ petani.nama }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="luas" placeholder="Luas" class="w-full mb-3 border p-2 rounded-lg shadow"
+                required>
+            <input type="text" name="jenis_tanaman" placeholder="Jenis Tanaman"
+                class="w-full mb-3 border p-2 rounded-lg shadow" required>
+                <div id="map" class="w-full h-64 mb-4 rounded-lg shadow border"></div>
+            <input type="text" name="lokasi" placeholder="Lokasi" class="w-full mb-3 border p-2 rounded-lg shadow"
+                required>
+            <input type="text" name="latitude" placeholder="Latitude" class="w-full mb-3 border p-2 rounded-lg shadow" required>
+            <input type="text" name="longitude" placeholder="Longitude" class="w-full mb-3 border p-2 rounded-lg shadow" required>
+                
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Simpan</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Step 3: Peta -->
+    <div x-show="step === 3" x-transition class="p-6 rounded-lg max-w-4xl mx-auto text-center">
+        <button @click="step = 1" class="mb-4 text-sm text-green-700 hover:text-green-900 flex items-center">
+            ⬅️ Kembali ke daftar
+        </button>
+        <h2 class="text-2xl font-bold text-green-800 mb-4">📍 Lokasi Lahan</h2>
+        <p class="text-green-700">Lihat lokasi lahan melalui peta berikut ini.</p>
+        <div id="map-lahan" class="mt-6 w-full h-[500px] rounded-lg border-2 border-green-200"></div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <div x-show="step === 1" class="fixed bottom-6 right-6 z-50">
+        <button @click="step = 2"
+            class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition text-xl flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Modal Preview Gambar -->
+    <div x-show="openIndex !== null" x-transition
+        class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50" style="display: none;">
+        <div class="relative max-w-4xl w-full p-4">
+            <button @click="openIndex = null"
+                class="absolute top-2 right-4 text-white text-3xl font-bold z-50 hover:text-red-400">✖️</button>
+            <img :src="images[openIndex]" alt="Preview"
+                class="w-full max-h-[90vh] object-contain rounded-lg shadow-lg" />
+        </div>
+    </div>
+
+</div>
+
+    <script>
+        function initMap() {
+            // Untuk form tambah lahan
+            const formMapEl = document.getElementById("map");
+            if (formMapEl) {
+                const start = { lat: -7.744728, lng: 113.7655526 };
+                const formMap = new google.maps.Map(formMapEl, {
+                    zoom: 14,
+                    center: start,
+                });
+    
+                let marker;
+                formMap.addListener("click", function (e) {
+                    const lat = e.latLng.lat();
+                    const lng = e.latLng.lng();
+    
+                    document.querySelector('input[name="latitude"]').value = lat;
+                    document.querySelector('input[name="longitude"]').value = lng;
+    
+                    if (marker) {
+                        marker.setPosition(e.latLng);
+                    } else {
+                        marker = new google.maps.Marker({
+                            position: e.latLng,
+                            map: formMap,
+                        });
+                    }
+                });
+            }
+    
+            // Untuk menampilkan semua lahan
+            const lahanMapEl = document.getElementById("map-lahan");
+            if (lahanMapEl) {
+                const mapLahan = new google.maps.Map(lahanMapEl, {
+                    zoom: 14,
+                    center: { lat: -7.744728, lng: 113.7655526 },
+                });
+    
+                const lahanData = {{ lahan_json|safe }};
+                lahanData.forEach(lahan => {
+                    const marker = new google.maps.Marker({
+                        position: { lat: lahan.latitude, lng: lahan.longitude },
+                        map: mapLahan,
+                        title: lahan.pemilik,
+                    });
+    
+                    const info = new google.maps.InfoWindow({
+                        content: `<strong>${lahan.pemilik}</strong><br>Luas: ${lahan.luas}<br>Jenis: ${lahan.jenis_tanaman}`,
+                    });
+    
+                    marker.addListener('click', () => {
+                        info.open(mapLahan, marker);
+                    });
+                });
+            }
+        }
+    </script>
+    
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyRSTjJmBylC2ofKL2zXe2c8Q6uV9d6pQ&callback=initMap"
+    async defer></script>
+{% endblock content %}

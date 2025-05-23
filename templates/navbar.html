@@ -1,0 +1,68 @@
+<nav class="space-y-4">
+    <a href="{% url 'beranda' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'beranda' %} bg-yellow-400 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-bar-chart"></i>
+        <span class="{% if menu == 'beranda' %} font-semibold {% endif %}">Dashboard</span>
+    </a>
+
+    <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        Informasi
+    </div>
+
+    <a href="{% url 'profil' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'profil' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-building"></i>
+        <span class="{% if menu == 'profil' %} font-semibold {% endif %}">Profil</span>
+    </a>
+
+    <a href="{% url 'grup' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'grup' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-circle"></i>
+        <span class="{% if menu == 'grup' %} font-semibold {% endif %}">Grup</span>
+    </a>
+
+    <a href="{% url 'ketua' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'ketua' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-user"></i>
+        <span class="{% if menu == 'ketua' %} font-semibold {% endif %}">Ketua</span>
+    </a>
+
+    <a href="{% url 'anggota' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'anggota' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-users"></i>
+        <span class="{% if menu == 'anggota' %} font-semibold {% endif %}">Anggota Kelompok</span>
+    </a>
+
+    <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        Monitoring
+    </div>
+
+    <a href="{% url 'alsintan' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'alsintan' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-wrench"></i>
+        <span class="{% if menu == 'alsintan' %} font-semibold {% endif %}">Alsintan</span>
+    </a>
+
+    <a href="{% url 'lahan' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'lahan' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-industry"></i>
+        <span class="{% if menu == 'lahan' %} font-semibold {% endif %}">Lahan Pertanian</span>
+    </a>
+
+    <a href="{% url 'erdkk' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'erdkk' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-area-chart"></i>
+        <span class="{% if menu == 'erdkk' %} font-semibold {% endif %}">Kebutuhan Pupuk</span>
+    </a>
+
+    <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        Forum
+    </div>
+
+    <a href="{% url 'tanaman' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'tanaman' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-heartbeat"></i>
+        <span class="{% if menu == 'tanaman' %} font-semibold {% endif %}">Kesehatan Tanaman</span>
+    </a>
+
+    <a href="{% url 'daftar_forum' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'forum' %} bg-green-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-comments"></i>
+        <span class="{% if menu == 'forum' %} font-semibold {% endif %}">Forum Diskusi</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600 transition">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+</nav>

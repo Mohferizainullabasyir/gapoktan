@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen"
+     x-data="{ step: 1, openIndex: null }">
+
+    <!-- Header Mobile -->
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
+        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+            <span>GAPOKTAN</span>
+        </h1>
+        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Judul Halaman -->
+    <h1 class="text-3xl font-bold mb-4 text-gray-800 border-b-2 border-green-600 pb-2">
+        Data Alat dan Mesin Pertanian (Alsintan)
+    </h1>
+
+    <!-- Step Navigation -->
+    <div class="flex justify-center mb-6">
+        <div class="inline-flex bg-white border border-green-600 rounded-full shadow-lg overflow-hidden">
+            <button @click="step = 1" :class="step === 1 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
+                    class="px-5 py-2 text-sm font-medium">Data Utama</button>
+            <button @click="step = 2" :class="step === 2 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
+                    class="px-5 py-2 text-sm font-medium">Anggaran</button>
+            <button @click="step = 3" :class="step === 3 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
+                    class="px-5 py-2 text-sm font-medium">Dokumentasi</button>
+        </div>
+    </div>
+
+    <!-- Accordion Data -->
+    <div class="space-y-4">
+        {% for alat in daftar_alsintan %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <button @click="openIndex === {{ forloop.counter0 }} ? openIndex = null : openIndex = {{ forloop.counter0 }}"
+                    class="w-full text-left px-6 py-4 focus:outline-none flex justify-between items-center bg-green-100 hover:bg-green-200">
+                <span class="text-lg font-semibold text-green-800">{{ alat.nama_alat }}</span>
+                <i :class="openIndex === {{ forloop.counter0 }} ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-green-700"></i>
+            </button>
+            <div
+            x-show="openIndex === {{ forloop.counter0 }}"
+            x-collapse.duration.900ms
+            x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-800"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="px-6 py-4 border-t border-green-200 bg-white rounded-b-md"
+            >
+
+
+                <!-- Step 1 -->
+                <div x-show="step === 1">
+                    <p><strong>Jenis:</strong> {{ alat.jenis_alat }}</p>
+                    <p><strong>Jumlah:</strong> {{ alat.jumlah }}</p>
+                    <p><strong>Kondisi:</strong> {{ alat.get_kondisi_display }}</p>
+                    <p><strong>Tanggal Pengadaan:</strong> {{ alat.tanggal_pengadaan|date:"d M Y" }}</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div x-show="step === 2">
+                    <p><strong>Sumber Dana:</strong> {{ alat.sumber_dana|default:"-" }}</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div x-show="step === 3">
+                    {% if alat.dokumentasi %}
+                        <img src="{{ alat.dokumentasi.url }}" class="w-40 h-40 object-cover rounded shadow" alt="Dokumentasi">
+                    {% else %}
+                        <p class="italic text-gray-500">Tidak ada dokumentasi</p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-gray-600 italic">Belum ada data Alsintan.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

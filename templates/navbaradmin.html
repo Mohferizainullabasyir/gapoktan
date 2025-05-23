@@ -1,0 +1,63 @@
+<nav class="space-y-4">
+    <a href="{% url 'dashboardadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'beranda' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-bar-chart"></i>
+        <span class="{% if menu == 'beranda' %} font-semibold {% endif %}">Dashboard</span>
+    </a>
+
+    <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        Informasi
+    </div>
+
+    <a href="{% url 'profiladmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'profil' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-building"></i>
+        <span class="{% if menu == 'profil' %} font-semibold {% endif %}">Profil</span>
+    </a>
+
+    <a href="{% url 'grupadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'grup' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
+        <i class="fa fa-align-justify"></i>
+        <span class="{% if menu == 'grup' %} font-semibold {% endif %}">Grup</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-user"></i>
+        <span>Ketua Kelompok</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-users"></i>
+        <span>Anggota Kelompok</span>
+    </a>
+
+    <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        Monitoring
+    </div>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-wrench"></i>
+        <span>Proyek</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-industry"></i>
+        <span>Lahan Pertanian</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-spinner"></i>
+        <span>Distribusi Pupuk</span>
+    </a>
+
+    <div class="px-1 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400 text-justify">
+        Pengecekan Kesehatan
+    </div>    
+
+    <a href="#" class="flex items-center space-x-3 p-1 rounded-lg hover:bg-blue-600 transition">
+        <i class="fa fa-heartbeat"></i>
+        <span>Kesehatan Tanaman</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600 transition">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+</nav>
