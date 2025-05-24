@@ -58,7 +58,6 @@ class Grup(models.Model):
             self.slug = slugify(self.nama) 
         return super().save(*args, **kwargs)
 
-
 class KetuaKelompok(models.Model):
     grup = models.ManyToManyField(Grup, related_name='ketua')
     nama = models.CharField(max_length=100)
@@ -126,7 +125,7 @@ class Petani(models.Model):
         if not self.slug: 
             self.slug = slugify(self.nama) 
         return super().save(*args, **kwargs)
-    
+        
     
 class Alsintan(models.Model):
     STATUS_CHOICES = [
@@ -164,7 +163,6 @@ class Lahan(models.Model):
     lokasi = RichTextField(blank=True, null=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    slug = models.SlugField(max_length=200, null=True,blank=True, unique=True)
     created_at = models.DateField(default=timezone.now) 
     slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     class Meta:
@@ -175,7 +173,7 @@ class Lahan(models.Model):
     
     def save(self, *args, **kwargs):  # new 
         if not self.slug: 
-            self.slug = slugify(self.pemilik) 
+            self.slug = slugify(self.luas) 
         return super().save(*args, **kwargs)
     
 class DataERDKK(models.Model):

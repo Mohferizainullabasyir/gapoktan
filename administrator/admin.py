@@ -9,7 +9,7 @@ class ProfilGapoktanAdmin(admin.ModelAdmin):
 
 @admin.register(Kegiatan)
 class KegiatanAdmin(admin.ModelAdmin):
-    list_display = ('id','judul', 'tanggal', 'preview_gambar')
+    list_display = ('id','judul', 'tanggal', 'preview_gambar','slug',)
     search_fields = ('judul', 'deskripsi')
     list_filter = ('tanggal',)
     ordering = ('-tanggal',)
@@ -22,12 +22,12 @@ class KegiatanAdmin(admin.ModelAdmin):
     
 @admin.register(Grup)
 class GrupAdmin(admin.ModelAdmin):
-    list_display=('id', 'nama', 'aktif',)
+    list_display=('id', 'nama', 'aktif','slug',)
     prepopulated_fields = {"slug": ("nama",)} 
 
 @admin.register(KetuaKelompok)
 class KetuaKelompokAdmin(admin.ModelAdmin):
-    list_display = ('id', 'daftar_grup', 'nama', 'nik', 'no_hp', 'alamat')
+    list_display = ('id', 'daftar_grup', 'nama', 'nik', 'no_hp', 'alamat','slug')
     filter_horizontal = ('grup',)
 
     def daftar_grup(self, obj):
@@ -37,28 +37,28 @@ class KetuaKelompokAdmin(admin.ModelAdmin):
     
 @admin.register(KetuaGapoktan)
 class KetuaGapoktanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'grup', 'nama', 'nik_tersembunyi', 'no_hp', 'alamat')
+    list_display = ('id', 'grup', 'nama', 'nik_tersembunyi', 'no_hp', 'alamat','slug')
 
     
 @admin.register(Petani)
 class PetaniAdmin(admin.ModelAdmin):
-    list_display=('id', 'grup', 'nama', 'nik', 'no_hp', 'alamat',)
+    list_display=('id', 'grup', 'nama', 'nik', 'no_hp', 'alamat','slug')
 
 @admin.register(Alsintan)
 class AlsintanAdmin(admin.ModelAdmin):
-    list_display = ('id','nama_alat','jenis_alat','jumlah','kondisi','tanggal_pengadaan','sumber_dana',)
+    list_display = ('id','nama_alat','jenis_alat','jumlah','kondisi','tanggal_pengadaan','sumber_dana','slug')
     search_fields = ('nama_alat', 'jenis_alat')
     list_filter = ('kondisi', 'tanggal_pengadaan')
 
     
 @admin.register(Lahan)
 class LahanAdmin(admin.ModelAdmin):
-    list_display=('id', 'pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi','latitude','longitude',)
+    list_display=('id', 'pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi','latitude','longitude','slug')
     prepopulated_fields = {"slug": ("pemilik",)} 
     
 @admin.register(DataERDKK)
 class DataERDKKAdmin(admin.ModelAdmin):
-    list_display = ('petani', 'komoditas', 'luas_lahan', 'jenis_pupuk', 'jumlah_kebutuhan', 'tahun_rencana')
+    list_display = ('petani', 'komoditas', 'luas_lahan', 'jenis_pupuk', 'jumlah_kebutuhan', 'tahun_rencana','slug')
     search_fields = ('petani__nama_petani', 'komoditas', 'jenis_pupuk')
     list_filter = ('tahun_rencana', 'jenis_pupuk', 'komoditas')
     prepopulated_fields = {"slug": ("petani",)}
