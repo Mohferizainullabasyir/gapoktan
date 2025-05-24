@@ -24,6 +24,7 @@ class Kegiatan(models.Model):
     tanggal = models.DateField()
     deskripsi = models.TextField()
     gambar = models.ImageField(upload_to='kegiatan/', blank=True, null=True)
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
 
     def __str__(self):
         return f"{self.judul} ({self.tanggal.strftime('%d-%m-%Y')})"
@@ -32,6 +33,11 @@ class Kegiatan(models.Model):
         verbose_name = "Kegiatan"
         verbose_name_plural = "Data Kegiatan"
         ordering = ['-tanggal']
+        
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.judul) 
+        return super().save(*args, **kwargs)
 
 
 
@@ -46,6 +52,11 @@ class Grup(models.Model):
         
     def __str__(self):
         return self.nama
+    
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.nama) 
+        return super().save(*args, **kwargs)
 
 
 class KetuaKelompok(models.Model):
@@ -54,6 +65,7 @@ class KetuaKelompok(models.Model):
     nik = models.CharField(max_length=100, default="0000000000000000")
     no_hp = models.CharField(max_length=15)
     alamat = RichTextField(blank=True, null=True)
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     
     class Meta:
         verbose_name_plural ="Data Ketua Kelompok"
@@ -64,13 +76,19 @@ class KetuaKelompok(models.Model):
     def nik_tersembunyi(self):
         return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
     
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.nama) 
+        return super().save(*args, **kwargs)
+    
+    
 class KetuaGapoktan(models.Model):
     grup = models.ForeignKey(Grup, on_delete=models.CASCADE, related_name='ketua_gapoktan')
     nama = models.CharField(max_length=100)
     nik = models.CharField(max_length=100, default="0000000000000000")
     no_hp = models.CharField(max_length=15)
     alamat = RichTextField(blank=True, null=True)
-
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     class Meta:
         verbose_name_plural = "Ketua Gapoktan"
 
@@ -80,7 +98,13 @@ class KetuaGapoktan(models.Model):
     def nik_tersembunyi(self):
         return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
     
-
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.nama) 
+        return super().save(*args, **kwargs)
+    
+    
+    
 class Petani(models.Model):
     grup = models.ForeignKey(Grup, on_delete=models.CASCADE, related_name='anggota')
     nama = models.CharField(max_length=100)
@@ -88,7 +112,7 @@ class Petani(models.Model):
     no_hp = models.CharField(max_length=15)
     alamat = RichTextField(blank=True, null=True)
     created_at = models.DateField(default=timezone.now) 
-    
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     class Meta:
         verbose_name_plural ="Data Petani"
     
@@ -98,6 +122,10 @@ class Petani(models.Model):
     def nik_tersembunyi(self):
         return self.nik[:-4].replace(self.nik[:-4], '*' * len(self.nik[:-4])) + self.nik[-4:]
     
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.nama) 
+        return super().save(*args, **kwargs)
     
     
 class Alsintan(models.Model):
@@ -115,12 +143,18 @@ class Alsintan(models.Model):
     sumber_dana = models.CharField(max_length=100, blank=True, null=True)
     dokumentasi = models.ImageField(upload_to='gambar/alsintan/', blank=True, null=True)
     keterangan = models.TextField(blank=True, null=True)
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
 
     class Meta:
         verbose_name_plural = "Data Alsintan"
 
     def __str__(self):
         return f"{self.nama_alat} - {self.jenis_alat}"
+    
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.nama_alat) 
+        return super().save(*args, **kwargs)
 
 class Lahan(models.Model):
     pemilik = models.ForeignKey(Petani, on_delete=models.CASCADE)
@@ -132,12 +166,17 @@ class Lahan(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     slug = models.SlugField(max_length=200, null=True,blank=True, unique=True)
     created_at = models.DateField(default=timezone.now) 
-    
+    slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     class Meta:
         verbose_name_plural ="Data Lahan"
         
     def __str__(self):
         return self.pemilik.nama
+    
+    def save(self, *args, **kwargs):  # new 
+        if not self.slug: 
+            self.slug = slugify(self.pemilik) 
+        return super().save(*args, **kwargs)
     
 class DataERDKK(models.Model):
     JENIS_PUPUK_CHOICES = [
