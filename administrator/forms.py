@@ -1,5 +1,5 @@
 from django import forms
-from .models import ProfilGapoktan, Kegiatan, Grup
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok 
 from django.utils.text import slugify
 
 class ProfilGapoktanForm(forms.ModelForm):
@@ -86,3 +86,39 @@ class GrupForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class KetuaKelompokForm(forms.ModelForm):
+    class Meta:
+        model = KetuaKelompok
+        fields = ['grup', 'nama', 'nik', 'no_hp', 'alamat']
+
+        widgets = {
+            'grup': forms.Select(attrs={
+                'class': 'select mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'nama': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Nama Ketua Kelompok',
+            }),
+            'nik': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'NIK',
+            }),
+            'no_hp': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'No HP',
+            }),
+            'alamat': forms.Textarea(attrs={
+                'class': 'textarea mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'rows': 3,
+                'placeholder': 'Alamat Ketua Kelompok',
+            }),
+        }
+
+        labels = {
+            'grup': 'Grup Tani',
+            'nama': 'Nama Ketua',
+            'nik': 'NIK',
+            'no_hp': 'Nomor HP',
+            'alamat': 'Alamat',
+        }

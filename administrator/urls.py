@@ -21,6 +21,13 @@ urlpatterns = [
     path('form-grup/', views.formgrupadmin, name='formgrupadmin'),
     path('edit-grup/<str:pk>', views.editgrupadmin, name='editgrupadmin'),
     path('delete-grup/<str:pk>', views.deletegrupadmin, name='deletegrupadmin'),
+    
+    #ketua
+    
+    path('ketua/', views.ketuaadmin, name='ketuaadmin'),
+    path('form-ketua/', views.formketuaadmin, name='formketuaadmin'),
+    path('edit-ketua/<int:pk>', views.editketuaadmin, name='editketuaadmin'),
+    path('delete-ketua/<int:pk>', views.deleteketuaadmin, name='deleteketuaadmin'),
 
 
 ]

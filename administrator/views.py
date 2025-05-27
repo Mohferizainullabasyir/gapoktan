@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum
-from .models import ProfilGapoktan, Kegiatan, Grup, Petani, Lahan, DataERDKK
-from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm 
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, Petani, Lahan, DataERDKK
+from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm 
 from datetime import datetime
 
 def dashboard(request):
@@ -18,7 +18,7 @@ def dashboard(request):
     total_organik = DataERDKK.objects.filter(jenis_pupuk='ORGANIK').aggregate(total=Sum('jumlah_kebutuhan'))['total'] or 0
 
     context = {
-    "judul": "Halaman Petani",
+    "judul": "Halaman Admin",
     'petani_per_bulan': petani_per_bulan,
     'lahan_per_bulan': lahan_per_bulan,
     'urea': total_urea,
@@ -122,7 +122,7 @@ def grupadmin(request):
     grup =  Grup.objects.all() 
     kegiatan_list = Kegiatan.objects.all() 
     context = {
-            "judul": "Data Profil",
+            "judul": "Data Grup",
             "menu":"grup",
             "grup_list":grup,
             "kegiatan_list": kegiatan_list,
@@ -168,3 +168,54 @@ def deletegrupadmin(request, pk):
         grup.delete()
         return redirect('grupadmin')  
     return redirect('grupadmin')
+
+#ketua poktan 
+
+def ketuaadmin(request):
+    ketua =  KetuaKelompok.objects.all() 
+    kegiatan_list = Kegiatan.objects.all() 
+    context = {
+            "judul": "Data KetuaKelompok",
+            "menu":"ketua",
+            "ketua_list":ketua,
+            "kegiatan_list": kegiatan_list,
+        }
+    return render(request, 'ketuaadmin.html', context)
+
+def formketuaadmin(request):
+    if request.method == "POST":
+        form = KetuaKelompokForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('ketuaadmin')
+    else:
+        form = KetuaKelompokForm()
+    return render(request, 'formketuaadmin.html', {
+        "judul": "Form KetuaKelompok",
+        "menu": "ketua",
+        "form": form
+    })
+
+def editketuaadmin(request, pk):
+    ketua = get_object_or_404(KetuaKelompok, id=pk)
+    if request.method == "POST":
+        form = KetuaKelompokForm(request.POST, request.FILES, instance=ketua)
+        if form.is_valid():
+            form.save()
+            return redirect('ketuaadmin')
+        else:
+            print(form.errors)  # Ini akan tampil di terminal
+    else:
+        form = KetuaKelompokForm(instance=ketua)
+    return render(request, 'formketuaadmin.html', {
+        "judul": "Edit KetuaKelompok",
+        "menu": "ketua",
+        "form": form
+    })
+
+def deleteketuaadmin(request, pk):
+    ketua = get_object_or_404(KetuaKelompok, pk=pk)
+    if request.method == 'POST':
+        ketua.delete()
+        return redirect('ketuaadmin')
+    return redirect('ketuaadmin')
