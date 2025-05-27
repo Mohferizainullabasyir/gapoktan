@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum
-from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, Petani, Lahan, DataERDKK
-from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm 
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Lahan, DataERDKK
+from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm, KetuaGapoktanForm 
 from datetime import datetime
 
 def dashboard(request):
@@ -173,12 +173,12 @@ def deletegrupadmin(request, pk):
 
 def ketuaadmin(request):
     ketua =  KetuaKelompok.objects.all() 
-    kegiatan_list = Kegiatan.objects.all() 
+    ketua_gapoktan_list = KetuaGapoktan.objects.all()
     context = {
             "judul": "Data KetuaKelompok",
             "menu":"ketua",
             "ketua_list":ketua,
-            "kegiatan_list": kegiatan_list,
+            "ketua_gapoktan_list": ketua_gapoktan_list,
         }
     return render(request, 'ketuaadmin.html', context)
 
@@ -217,5 +217,45 @@ def deleteketuaadmin(request, pk):
     ketua = get_object_or_404(KetuaKelompok, pk=pk)
     if request.method == 'POST':
         ketua.delete()
+        return redirect('ketuaadmin')
+    return redirect('ketuaadmin')
+
+# ketua gapoktan
+
+def formketuagapoktanadmin(request):
+    if request.method == "POST":
+        form = KetuaGapoktanForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('ketuaadmin')
+    else:
+        form = KetuaGapoktanForm()
+    return render(request, 'formketuagapoktanadmin.html', {
+        "judul": "Form KetuaGapoktan",
+        "menu": "ketuagapoktan",
+        "form": form
+    })
+
+def editketuagapoktanadmin(request, pk):
+    ketuagapoktan = get_object_or_404(KetuaGapoktan, id=pk)
+    if request.method == "POST":
+        form = KetuaGapoktanForm(request.POST, request.FILES, instance=ketuagapoktan)
+        if form.is_valid():
+            form.save()
+            return redirect('ketuaadmin')
+        else:
+            print(form.errors)  # Ini akan tampil di terminal
+    else:
+        form = KetuaGapoktanForm(instance=ketuagapoktan)
+    return render(request, 'formketuagapoktanadmin.html', {
+        "judul": "Edit KetuaGapoktan",
+        "menu": "ketua",
+        "form": form
+    })
+
+def deleteketuagapoktanadmin(request, pk):
+    ketuagapoktan = get_object_or_404(KetuaGapoktan, pk=pk)
+    if request.method == 'POST':
+        ketuagapoktan.delete()
         return redirect('ketuaadmin')
     return redirect('ketuaadmin')

@@ -1,5 +1,5 @@
 from django import forms
-from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok 
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan 
 from django.utils.text import slugify
 
 class ProfilGapoktanForm(forms.ModelForm):
@@ -93,9 +93,10 @@ class KetuaKelompokForm(forms.ModelForm):
         fields = ['grup', 'nama', 'nik', 'no_hp', 'alamat']
 
         widgets = {
-            'grup': forms.Select(attrs={
+            'grup': forms.SelectMultiple(attrs={
                 'class': 'select mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
             }),
+
             'nama': forms.TextInput(attrs={
                 'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
                 'placeholder': 'Nama Ketua Kelompok',
@@ -117,6 +118,44 @@ class KetuaKelompokForm(forms.ModelForm):
 
         labels = {
             'grup': 'Grup Tani',
+            'nama': 'Nama Ketua',
+            'nik': 'NIK',
+            'no_hp': 'Nomor HP',
+            'alamat': 'Alamat',
+        }
+        
+
+
+class KetuaGapoktanForm(forms.ModelForm):
+    class Meta:
+        model = KetuaGapoktan
+        fields = ['grup', 'nama', 'nik', 'no_hp', 'alamat']
+
+        widgets = {
+            'grup': forms.Select(attrs={
+                'class': 'select mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'nama': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Nama Ketua Gapoktan',
+            }),
+            'nik': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'NIK',
+            }),
+            'no_hp': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Nomor HP',
+            }),
+            'alamat': forms.Textarea(attrs={
+                'class': 'textarea mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'rows': 3,
+                'placeholder': 'Alamat Ketua Gapoktan',
+            }),
+        }
+
+        labels = {
+            'grup': 'Grup Gapoktan',
             'nama': 'Nama Ketua',
             'nik': 'NIK',
             'no_hp': 'Nomor HP',

@@ -26,8 +26,15 @@ urlpatterns = [
     
     path('ketua/', views.ketuaadmin, name='ketuaadmin'),
     path('form-ketua/', views.formketuaadmin, name='formketuaadmin'),
-    path('edit-ketua/<int:pk>', views.editketuaadmin, name='editketuaadmin'),
-    path('delete-ketua/<int:pk>', views.deleteketuaadmin, name='deleteketuaadmin'),
+    path('edit-ketua/<str:pk>', views.editketuaadmin, name='editketuaadmin'),
+    path('delete-ketua/<str:pk>', views.deleteketuaadmin, name='deleteketuaadmin'),
+    
+    #ketua gapoktan
+    
+    path('form-ketuagapoktan/', views.formketuagapoktanadmin, name='formketuagapoktanadmin'),
+    path('edit-ketuagapoktan/<str:pk>/', views.editketuagapoktanadmin, name='editketuagapoktanadmin'),
+    path('delete-ketuagapoktan/<str:pk>/', views.deleteketuagapoktanadmin, name='deleteketuagapoktanadmin'),
+    
 
 
 ]
