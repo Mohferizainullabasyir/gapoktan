@@ -35,6 +35,11 @@ urlpatterns = [
     path('edit-ketuagapoktan/<str:pk>/', views.editketuagapoktanadmin, name='editketuagapoktanadmin'),
     path('delete-ketuagapoktan/<str:pk>/', views.deleteketuagapoktanadmin, name='deleteketuagapoktanadmin'),
     
-
+    #anggota
+    
+    path('anggota/', views.anggotaadmin, name='anggotaadmin'),
+    path('form-anggota/', views.formanggotaadmin, name='formanggotaadmin'),
+    path('edit-anggota/<str:pk>', views.editanggotaadmin, name='editanggotaadmin'),
+    path('delete-anggota/<str:pk>', views.deleteanggotaadmin, name='deleteanggotaadmin'),
 
 ]

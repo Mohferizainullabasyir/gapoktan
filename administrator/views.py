@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum
 from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Lahan, DataERDKK
-from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm, KetuaGapoktanForm 
+from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm, KetuaGapoktanForm, PetaniForm 
 from datetime import datetime
 
 def dashboard(request):
@@ -232,7 +232,7 @@ def formketuagapoktanadmin(request):
         form = KetuaGapoktanForm()
     return render(request, 'formketuagapoktanadmin.html', {
         "judul": "Form KetuaGapoktan",
-        "menu": "ketuagapoktan",
+        "menu": "ketua",
         "form": form
     })
 
@@ -259,3 +259,54 @@ def deleteketuagapoktanadmin(request, pk):
         ketuagapoktan.delete()
         return redirect('ketuaadmin')
     return redirect('ketuaadmin')
+
+# anggota
+
+def anggotaadmin(request):
+    anggota =  Petani.objects.all() 
+    anggota_gapoktan_list = KetuaGapoktan.objects.all()
+    context = {
+            "judul": "Data Petani",
+            "menu":"anggota",
+            "anggota_list":anggota,
+            "anggota_gapoktan_list": anggota_gapoktan_list,
+        }
+    return render(request, 'anggotaadmin.html', context)
+
+def formanggotaadmin(request):
+    if request.method == "POST":
+        form = PetaniForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('anggotaadmin')
+    else:
+        form = PetaniForm()
+    return render(request, 'formanggotaadmin.html', {
+        "judul": "Form Petani",
+        "menu": "anggota",
+        "form": form
+    })
+
+def editanggotaadmin(request, pk):
+    anggota = get_object_or_404(Petani, id=pk)
+    if request.method == "POST":
+        form = PetaniForm(request.POST, request.FILES, instance=anggota)
+        if form.is_valid():
+            form.save()
+            return redirect('anggotaadmin')
+        else:
+            print(form.errors)  # Ini akan tampil di terminal
+    else:
+        form = PetaniForm(instance=anggota)
+    return render(request, 'formanggotaadmin.html', {
+        "judul": "Edit Petani",
+        "menu": "anggota",
+        "form": form
+    })
+
+def deleteanggotaadmin(request, pk):
+    anggota = get_object_or_404(Petani, pk=pk)
+    if request.method == 'POST':
+        anggota.delete()
+        return redirect('anggotaadmin')
+    return redirect('anggotaadmin')

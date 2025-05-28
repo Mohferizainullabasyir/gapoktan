@@ -49,6 +49,7 @@ def kegiatan_list(request):
     kegiatan_list = Kegiatan.objects.all().order_by('-tanggal')  # urutkan dari yang terbaru
     context = {
         'kegiatan_list': kegiatan_list,
+        "menu":"profil",
     }
     return render(request, 'kegiatan_list.html', context)
 

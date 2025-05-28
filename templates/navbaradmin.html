@@ -18,14 +18,14 @@
         <span class="{% if menu == 'grup' %} font-semibold {% endif %}">Grup</span>
     </a>
 
-    <a href="{% url 'ketuaadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+    <a href="{% url 'ketuaadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'ketua' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
         <i class="fa fa-user"></i>
-        <span>Ketua Kelompok</span>
+         <span class="{% if menu == 'ketua' %} font-semibold {% endif %}">Ketua Kelompok</span>
     </a>
 
-    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+    <a href="{% url 'anggotaadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'anggota' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
         <i class="fa fa-users"></i>
-        <span>Anggota Kelompok</span>
+         <span class="{% if menu == 'anggota' %} font-semibold {% endif %}">Anggota Kelompok</span>
     </a>
 
     <div class="px-3 pt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
