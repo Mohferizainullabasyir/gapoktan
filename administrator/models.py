@@ -141,7 +141,7 @@ class Alsintan(models.Model):
     tanggal_pengadaan = models.DateField()
     sumber_dana = models.CharField(max_length=100, blank=True, null=True)
     dokumentasi = models.ImageField(upload_to='gambar/alsintan/', blank=True, null=True)
-    keterangan = models.TextField(blank=True, null=True)
+    keterangan = RichTextField(blank=True, null=True)
     slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
 
     class Meta:

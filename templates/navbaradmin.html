@@ -1,5 +1,5 @@
 <nav class="space-y-4">
-    <a href="{% url 'dashboardadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'beranda' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
+    <a href="{% url 'dashboardadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'beranda' %} bg-blue-700 {% endif %} hover:bg-blue-600 transition">
         <i class="fa fa-bar-chart"></i>
         <span class="{% if menu == 'beranda' %} font-semibold {% endif %}">Dashboard</span>
     </a>
@@ -32,14 +32,14 @@
         Monitoring
     </div>
 
-    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+     <a href="{% url 'alsintanadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'alsintan' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
         <i class="fa fa-wrench"></i>
-        <span>Proyek</span>
+        <span class="{% if menu == 'alsintan' %} font-semibold {% endif %}">Alsintan</span>
     </a>
 
-    <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">
+    <a href="{% url 'lahanadmin' %}" class="flex items-center space-x-3 p-3 rounded-lg {% if menu == 'lahan' %} bg-gray-700 {% endif %} hover:bg-blue-600 transition">
         <i class="fa fa-industry"></i>
-        <span>Lahan Pertanian</span>
+         <span class="{% if menu == 'lahan' %} font-semibold {% endif %}">Lahan Pertanian</span>
     </a>
 
     <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition">

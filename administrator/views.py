@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum
-from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Lahan, DataERDKK
-from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm, KetuaGapoktanForm, PetaniForm 
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Alsintan, Lahan, DataERDKK
+from .forms import ProfilGapoktanForm, KegiatanForm, GrupForm, KetuaKelompokForm, KetuaGapoktanForm, PetaniForm, AlsintanForm, LahanForm 
 from datetime import datetime
 
 def dashboard(request):
@@ -19,6 +19,7 @@ def dashboard(request):
 
     context = {
     "judul": "Halaman Admin",
+    "menu": "beranda",
     'petani_per_bulan': petani_per_bulan,
     'lahan_per_bulan': lahan_per_bulan,
     'urea': total_urea,
@@ -310,3 +311,106 @@ def deleteanggotaadmin(request, pk):
         anggota.delete()
         return redirect('anggotaadmin')
     return redirect('anggotaadmin')
+
+#alsintan
+
+def alsintanadmin(request):
+    alsintan =  Alsintan.objects.all() 
+    context = {
+            "judul": "Data Alsintan",
+            "menu":"alsintan",
+            "alsintan_list":alsintan,
+        }
+    return render(request, 'alsintanadmin.html', context)
+
+def formalsintanadmin(request):
+    if request.method == "POST":
+        form = AlsintanForm(request.POST, request.FILES)  # Ambil data dari request
+        if form.is_valid():  # Validasi form
+            form.save()  # Simpan data ke database
+            return redirect('alsintanadmin')  # Redirect ke halaman alsintan setelah menyimpan
+    else:
+        form = AlsintanForm()  # Tampilkan form kosong jika GET request
+    context = {
+        "judul": "Form Alsintan",
+        "menu": "alsintan",
+        "form": form
+    }
+    return render(request, 'formalsintanadmin.html', context)
+
+
+def editalsintanadmin(request, pk):
+    alsintan = get_object_or_404(Alsintan, id=pk)
+    if request.method == "POST":
+        form = AlsintanForm(request.POST, request.FILES, instance=alsintan)
+        if form.is_valid():
+            form.save()
+            return redirect('alsintanadmin')  # Redirect ke halaman daftar alsintan
+    else:
+        form = AlsintanForm(instance=alsintan)
+    context = {
+         "judul": "Form Edit Alsintan",
+        "menu": "alsintan",
+        "form": form
+    }
+    return render(request, 'formalsintanadmin.html', context)
+
+
+def deletealsintanadmin(request, pk):
+    alsintan = get_object_or_404(Alsintan, pk=pk)
+    if request.method == 'POST':
+        alsintan.delete()
+        return redirect('alsintanadmin')  
+    return redirect('alsintanadmin')
+
+
+#Lahan
+
+def lahanadmin(request):
+    lahan =  Lahan.objects.all() 
+    context = {
+            "judul": "Data Lahan",
+            "menu":"lahan",
+            "lahan_list":lahan,
+        }
+    return render(request, 'lahanadmin.html', context)
+
+def formlahanadmin(request):
+    if request.method == "POST":
+        form = LahanForm(request.POST, request.FILES)  # Ambil data dari request
+        if form.is_valid():  # Validasi form
+            form.save()  # Simpan data ke database
+            return redirect('lahanadmin')  # Redirect ke halaman lahan setelah menyimpan
+    else:
+        form = LahanForm()  # Tampilkan form kosong jika GET request
+    context = {
+        "judul": "Form Lahan",
+        "menu": "lahan",
+        "form": form
+    }
+    return render(request, 'formlahanadmin.html', context)
+
+
+def editlahanadmin(request, pk):
+    lahan = get_object_or_404(Lahan, id=pk)
+    if request.method == "POST":
+        form = LahanForm(request.POST, request.FILES, instance=lahan)
+        if form.is_valid():
+            form.save()
+            return redirect('lahanadmin')  # Redirect ke halaman daftar lahan
+    else:
+        form = LahanForm(instance=lahan)
+    context = {
+         "judul": "Form Edit Lahan",
+        "menu": "lahan",
+        "form": form
+    }
+    return render(request, 'formlahanadmin.html', context)
+
+
+def deletelahanadmin(request, pk):
+    lahan = get_object_or_404(Lahan, pk=pk)
+    if request.method == 'POST':
+        lahan.delete()
+        return redirect('lahanadmin')  
+    return redirect('lahanadmin')

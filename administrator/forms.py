@@ -1,5 +1,5 @@
 from django import forms
-from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani 
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Alsintan, Lahan 
 from django.utils.text import slugify
 
 class ProfilGapoktanForm(forms.ModelForm):
@@ -199,4 +199,104 @@ class PetaniForm(forms.ModelForm):
             'nik': 'NIK',
             'no_hp': 'Nomor HP',
             'alamat': 'Alamat',
+        }
+        
+
+class AlsintanForm(forms.ModelForm):
+    class Meta:
+        model = Alsintan
+        fields = [
+            'nama_alat', 'jenis_alat', 'jumlah', 'kondisi','tanggal_pengadaan', 'sumber_dana', 'dokumentasi', 'keterangan'
+        ]
+
+        widgets = {
+            'nama_alat': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Nama Alat Pertanian',
+            }),
+            'jenis_alat': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Jenis Alat',
+            }),
+            'jumlah': forms.NumberInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Jumlah Unit',
+            }),
+            'kondisi': forms.Select(attrs={
+                'class': 'select mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'tanggal_pengadaan': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'sumber_dana': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Contoh: Dana Desa, APBD, dll',
+            }),
+            'dokumentasi': forms.ClearableFileInput(attrs={
+                'class': 'file-input mt-1 block w-full',
+            }),
+            'keterangan': forms.Textarea(attrs={
+                'class': 'textarea mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'rows': 3,
+                'placeholder': 'Keterangan tambahan (opsional)',
+            }),
+        }
+
+        labels = {
+            'nama_alat': 'Nama Alat',
+            'jenis_alat': 'Jenis Alat',
+            'jumlah': 'Jumlah',
+            'kondisi': 'Kondisi',
+            'tanggal_pengadaan': 'Tanggal Pengadaan',
+            'sumber_dana': 'Sumber Dana',
+            'dokumentasi': 'Foto/Dokumentasi',
+            'keterangan': 'Keterangan',
+        }
+
+class LahanForm(forms.ModelForm):
+    class Meta:
+        model = Lahan
+        fields = ['pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi', 'latitude', 'longitude']
+
+        widgets = {
+            'pemilik': forms.Select(attrs={
+                'class': 'select mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'gambar_lahan': forms.ClearableFileInput(attrs={
+                'class': 'file-input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+            }),
+            'luas': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Luas lahan (contoh: 2 hektar)',
+            }),
+            'jenis_tanaman': forms.TextInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Jenis tanaman (contoh: Padi, Jagung)',
+            }),
+            'lokasi': forms.Textarea(attrs={
+                'class': 'textarea mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'rows': 3,
+                'placeholder': 'Deskripsi lokasi lahan',
+            }),
+            'latitude': forms.NumberInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Latitude (contoh: -7.123456)',
+                'step': 'any',
+            }),
+            'longitude': forms.NumberInput(attrs={
+                'class': 'input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'placeholder': 'Longitude (contoh: 113.123456)',
+                'step': 'any',
+            }),
+        }
+
+        labels = {
+            'pemilik': 'Pemilik Lahan',
+            'gambar_lahan': 'Gambar Lahan',
+            'luas': 'Luas Lahan',
+            'jenis_tanaman': 'Jenis Tanaman',
+            'lokasi': 'Deskripsi Lokasi',
+            'latitude': 'Latitude',
+            'longitude': 'Longitude',
         }
