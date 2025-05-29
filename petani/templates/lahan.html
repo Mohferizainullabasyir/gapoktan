@@ -65,9 +65,9 @@
     </div>
 
     <!-- Step 2: Form Tambah -->
-    <div x-show="step === 2" x-transition class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+    <div x-show="step === 2" x-transition class="bg-white p-6 rounded-lg shadow-md max-w-full mx-auto">
         <button @click="step = 1" class="mb-4 text-sm text-green-700 hover:text-green-900 flex items-center">
-            ⬅️ Kembali ke daftarr
+            ⬅️ Kembali ke daftar
         </button>
         <h2 class="text-2xl font-bold text-green-800 mb-6">➕ Tambah Lahan Baru</h2>
         <form method="post" enctype="multipart/form-data" action="{% url 'tambah_lahan' %}">
