@@ -160,7 +160,7 @@ class Lahan(models.Model):
     gambar_lahan = models.ImageField(upload_to='gambar/lahan', blank=False, null=True)
     luas = models.CharField(max_length=20) 
     jenis_tanaman = models.CharField(max_length=100)
-    lokasi = RichTextField(blank=True, null=True)
+    lokasi = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     created_at = models.DateField(default=timezone.now) 

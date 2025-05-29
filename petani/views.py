@@ -21,6 +21,10 @@ def beranda(request):
     total_npk = DataERDKK.objects.filter(jenis_pupuk='NPK').aggregate(total=Sum('jumlah_kebutuhan'))['total'] or 0
     total_organik = DataERDKK.objects.filter(jenis_pupuk='ORGANIK').aggregate(total=Sum('jumlah_kebutuhan'))['total'] or 0
 
+    anggota_terbaru = Petani.objects.all().order_by('-created_at')[:5]
+    lahan_terbaru = Lahan.objects.all().order_by('-created_at')[:5]
+    alsintan_terbaru = Alsintan.objects.all().order_by('-tanggal_pengadaan')[:5]
+    
     context = {
         "judul": "Halaman Petani",
         "menu": "beranda", 
@@ -29,6 +33,9 @@ def beranda(request):
         'urea': total_urea,
         'npk': total_npk,
         'organik': total_organik,
+        'anggota_terbaru':anggota_terbaru,
+        'lahan_terbaru': lahan_terbaru,
+        'alsintan_terbaru': alsintan_terbaru,
     }
     return render(request, 'beranda.html', context)
 
@@ -125,6 +132,7 @@ def alsintan(request):
         "judul": "Halaman Alsintan",
         "menu": "alsintan",
         "daftar_alsintan": daftar_alsintan,
+        
     }
     return render(request, 'alsintan.html', context)
 

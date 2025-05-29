@@ -3,12 +3,21 @@
 {% block content %}
 
 <div class="min-h-screen bg-gradient-to-br from-green-100 via-blue-200 to-green-300 p-6">
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded shadow">
+        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+            <span>GAPOKTAN</span>
+        </h1>
+        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
     <!-- Header -->
     <header class="mb-8 text-center">
         <div class="flex justify-center mb-4">
             <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-16 h-16">
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold text-green-800 mb-2">Ketua Kelompok Tani</h1>
+        <h1 class="text-4xl font-extrabold text-green-900 drop-shadow">Ketua Kelompok Tani</h1>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">Informasi lengkap ketua poktan dan gapoktan Kecamatan Mlandingan</p>
     </header>
 

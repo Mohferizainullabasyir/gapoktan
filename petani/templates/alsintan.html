@@ -3,11 +3,9 @@
 {% load humanize %}
 
 {% block content %}
-<div class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen"
-     x-data="{ step: 1, openIndex: null }">
 
-    <!-- Header Mobile -->
-    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
+<div class="min-h-screen bg-gradient-to-br from-green-100 via-blue-200 to-green-300 p-6">
+    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded shadow">
         <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
             <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
             <span>GAPOKTAN</span>
@@ -17,72 +15,146 @@
         </button>
     </div>
 
-    <!-- Judul Halaman -->
-    <h1 class="text-3xl font-bold mb-4 text-gray-800 border-b-2 border-green-600 pb-2">
-        Data Alat dan Mesin Pertanian (Alsintan)
-    </h1>
+<div class="min-h-screen "
+     x-data="{ step: 1, openIndex: null }">
 
-    <!-- Step Navigation -->
-    <div class="flex justify-center mb-6">
-        <div class="inline-flex bg-white border border-green-600 rounded-full shadow-lg overflow-hidden">
-            <button @click="step = 1" :class="step === 1 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
-                    class="px-5 py-2 text-sm font-medium">Data Utama</button>
-            <button @click="step = 2" :class="step === 2 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
-                    class="px-5 py-2 text-sm font-medium">Anggaran</button>
-            <button @click="step = 3" :class="step === 3 ? 'bg-green-600 text-white' : 'text-green-700 hover:bg-green-100'"
-                    class="px-5 py-2 text-sm font-medium">Dokumentasi</button>
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-center mb-8">
+        <div>
+            <div class="flex justify-center mb-4">
+                <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-16 h-16">
+            </div>
+            <h1 class="text-4xl font-extrabold text-green-900 text-justify drop-shadow">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-blue-600">
+                    Monitoring Alsintan
+                </span>
+            </h1>
+            <p class="text-gray-600 text-justify">Alat dan Mesin Pertanian Gapoktan Kecamatan Mlandingan.</p>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden mt-4">
+            <button @click="isSidebarOpen = !isSidebarOpen" class="p-2 rounded-lg bg-white shadow-sm">
+                <i class="fas fa-bars text-gray-700"></i>
+            </button>
         </div>
     </div>
 
-    <!-- Accordion Data -->
-    <div class="space-y-4">
-        {% for alat in daftar_alsintan %}
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <button @click="openIndex === {{ forloop.counter0 }} ? openIndex = null : openIndex = {{ forloop.counter0 }}"
-                    class="w-full text-left px-6 py-4 focus:outline-none flex justify-between items-center bg-green-100 hover:bg-green-200">
-                <span class="text-lg font-semibold text-green-800">{{ alat.nama_alat }}</span>
-                <i :class="openIndex === {{ forloop.counter0 }} ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-green-700"></i>
+    <!-- Step Navigation -->
+    <div class="flex justify-center mb-8">
+        <div class="inline-flex bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <button @click="step = 1" 
+                    :class="step === 1 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md' : 'text-gray-700 hover:bg-gray-100/50'"
+                    class="px-6 py-3 text-sm font-medium transition-all duration-300">
+                <i class="fas fa-info-circle mr-2"></i> Data Utama
             </button>
-            <div
-            x-show="openIndex === {{ forloop.counter0 }}"
-            x-collapse.duration.900ms
-            x-transition:enter="transition ease-out duration-500"
-            x-transition:enter-start="opacity-0 -translate-y-2"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-800"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 -translate-y-2"
-            class="px-6 py-4 border-t border-green-200 bg-white rounded-b-md"
-            >
+            <button @click="step = 2" 
+                    :class="step === 2 ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md' : 'text-gray-700 hover:bg-gray-100/50'"
+                    class="px-6 py-3 text-sm font-medium transition-all duration-300">
+                <i class="fas fa-money-bill-wave mr-2"></i> Anggaran
+            </button>
+            <button @click="step = 3" 
+                    :class="step === 3 ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white shadow-md' : 'text-gray-700 hover:bg-gray-100/50'"
+                    class="px-6 py-3 text-sm font-medium transition-all duration-300">
+                <i class="fas fa-align-left mr-2"></i> Keterangan
+            </button>
+        </div>
+    </div>
 
-
+    <!-- Alsintan Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for alat in daftar_alsintan %}
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100">
+            
+            <!-- Card Header: Foto -->
+            <div class="relative">
+                {% if alat.dokumentasi %}
+                <img src="{{ alat.dokumentasi.url }}" class="w-full h-40 object-cover" alt="{{ alat.nama_alat }}">
+                {% else %}
+                <div class="w-full h-40 bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center">
+                    <i class="fas fa-tractor text-4xl text-gray-400"></i>
+                </div>
+                {% endif %}
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-xl font-bold text-white">{{ alat.nama_alat }}</h3>
+                    <p class="text-sm text-gray-200">{{ alat.jenis_alat }}</p>
+                </div>
+                <div class="absolute top-4 right-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold 
+                              {% if alat.kondisi == 'Baik' %}bg-green-100 text-green-800
+                              {% elif alat.kondisi == 'Rusak' %}bg-red-100 text-red-800
+                              {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {{ alat.get_kondisi_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Card Body -->
+            <div class="p-5">
+                
                 <!-- Step 1 -->
-                <div x-show="step === 1">
-                    <p><strong>Jenis:</strong> {{ alat.jenis_alat }}</p>
-                    <p><strong>Jumlah:</strong> {{ alat.jumlah }}</p>
-                    <p><strong>Kondisi:</strong> {{ alat.get_kondisi_display }}</p>
-                    <p><strong>Tanggal Pengadaan:</strong> {{ alat.tanggal_pengadaan|date:"d M Y" }}</p>
+                <div x-show="step === 1" x-transition>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-box-open text-gray-400 w-6"></i>
+                            <span class="ml-2 text-gray-700">Jumlah: {{ alat.jumlah }} Unit</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-calendar-alt text-gray-400 w-6"></i>
+                            <span class="ml-2 text-gray-700">Pengadaan: {{ alat.tanggal_pengadaan|date:"d M Y" }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-tag text-gray-400 w-6"></i>
+                            <span class="ml-2 text-gray-700">Jenis: {{ alat.jenis_alat }}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div x-show="step === 2">
-                    <p><strong>Sumber Dana:</strong> {{ alat.sumber_dana|default:"-" }}</p>
+                <div x-show="step === 2" x-transition>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-wallet text-gray-400 w-6"></i>
+                            <span class="ml-2 text-gray-700">Sumber Dana: {{ alat.sumber_dana|default:"-" }}</span>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Step 3 -->
-                <div x-show="step === 3">
-                    {% if alat.dokumentasi %}
-                        <img src="{{ alat.dokumentasi.url }}" class="w-40 h-40 object-cover rounded shadow" alt="Dokumentasi">
-                    {% else %}
-                        <p class="italic text-gray-500">Tidak ada dokumentasi</p>
-                    {% endif %}
+                
+                <!-- Step 3: Keterangan -->
+                <div x-show="step === 3" x-transition>
+                    <div class="mt-2">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-gray-400 w-6 mt-1"></i>
+                            <span class="ml-2 text-gray-700">
+                                {% if alat.keterangan %}
+                                    <div class="prose max-w-none text-sm mt-1">{{ alat.keterangan|safe }}</div>
+                                {% else %}
+                                    <span class="italic text-gray-400">Tidak ada keterangan</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
+            <!-- Card Footer -->
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs text-gray-500">ID: {{ alat.id|stringformat:"04d" }}</span>
             </div>
         </div>
         {% empty %}
-        <div class="text-center text-gray-600 italic">Belum ada data Alsintan.</div>
+        <div class="col-span-full text-center py-12">
+            <div class="mx-auto w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-tractor text-3xl text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-700">Belum ada data Alsintan</h3>
+            <p class="text-gray-500 mt-1">Tambahkan data alat pertanian untuk memulai</p>
+        </div>
         {% endfor %}
     </div>
 </div>
+
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 {% endblock %}
