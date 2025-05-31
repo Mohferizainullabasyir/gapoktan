@@ -1,64 +1,80 @@
+<!-- daftar_forum.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
-<div class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen"
-     x-data="{ step: 1, openIndex: null }">
-
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
     <!-- Header Mobile -->
-    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
-        <h1 class="text-2xl font-bold flex items-center space-x-2 animate-pulse">
-            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
+    <div class="md:hidden flex justify-between items-center bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl shadow-lg mb-6">
+        <h1 class="text-xl font-bold flex items-center space-x-2">
+            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-7 h-7">
             <span>GAPOKTAN</span>
         </h1>
-        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
+        <button @click="isSidebarOpen = !isSidebarOpen" class="p-2 rounded-lg bg-white/10 hover:bg-white/20">
             <i class="fas fa-bars"></i>
         </button>
     </div>
 
-    <!-- Forum Diskusi -->
-    <div class="ml-6 md:ml-16 mr-4">
-        <div class="flex justify-between items-center mb-6 pr-4">
-            <h1 class="text-3xl font-bold text-gray-800">Forum Diskusi</h1>
-            <a href="{% url 'buat_forum' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-md transition hover:scale-105">+ Buat Diskusi</a>
+    <div class="max-w-4xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                        Forum Diskusi
+                    </span>
+                </h1>
+                <p class="text-gray-500">Berbagi pengetahuan dan pengalaman bersama</p>
+            </div>
+            <a href="{% url 'buat_forum' %}" 
+               class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-5 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                <i class="fas fa-plus"></i> Buat Diskusi
+            </a>
         </div>
 
-        {% for forum in forum_list %}
-        <div class="flex items-start mb-6 animate-slide-up">
-            <div class="flex-shrink-0">
-                <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold shadow">
-                    {{ forum.user.username|first|upper }}
-                </div>
-            </div>
-            <div class="ml-4 max-w-[80%]">
-                <div class="bg-white p-4 rounded-2xl shadow-lg border border-blue-200 relative group transition-all hover:shadow-blue-300">
-                    <a href="{% url 'detail_forum' forum.id %}" class="text-blue-700 font-semibold text-lg hover:underline">
-                        {{ forum.judul }}
-                    </a>
-                    <p class="text-gray-700 mt-1">{{ forum.isi|truncatewords:20 }}</p>
-                    <div class="text-sm text-gray-400 mt-2">
-                        Oleh: <span class="font-medium">{{ forum.user.username }}</span> |
-                        {{ forum.tanggal|date:"d M Y H:i" }}
+        <div class="space-y-6">
+            {% for forum in forum_list %}
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
+                <div class="p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg">
+                                {{ forum.user.username|first|upper }}
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <a href="{% url 'detail_forum' forum.id %}" class="block">
+                                <h3 class="text-xl font-bold text-gray-800 hover:text-emerald-600 transition-colors">
+                                    {{ forum.judul }}
+                                </h3>
+                                <p class="text-gray-600 mt-2 line-clamp-2">{{ forum.isi }}</p>
+                            </a>
+                            <div class="mt-4 flex items-center text-sm text-gray-500">
+                                <span class="font-medium text-emerald-600">{{ forum.user.username }}</span>
+                                <span class="mx-2">•</span>
+                                <span>{{ forum.tanggal|date:"d M Y H:i" }}</span>
+                                <span class="mx-2">•</span>
+                                <span class="flex items-center gap-1">
+                                    <i class="fas fa-comment"></i> {{ forum.komentar_set.count }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="bg-white rounded-2xl shadow-sm p-8 text-center">
+                <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-comments text-3xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-700">Belum ada diskusi</h3>
+                <p class="text-gray-500 mt-2">Jadilah yang pertama memulai diskusi</p>
+                <a href="{% url 'buat_forum' %}" class="mt-4 inline-block bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-2 rounded-lg shadow hover:shadow-md transition">
+                    Buat Diskusi Pertama
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-gray-500 text-lg mt-10">Belum ada diskusi yang dibuat.</p>
-        {% endfor %}
     </div>
 </div>
-
-<!-- Tailwind Custom Animation -->
-<style>
-@keyframes slide-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-.animate-slide-up {
-    animation: slide-up 0.6s ease-out both;
-}
-</style>
 
 {% endblock %}
