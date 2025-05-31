@@ -53,7 +53,7 @@ class AlsintanAdmin(admin.ModelAdmin):
     
 @admin.register(Lahan)
 class LahanAdmin(admin.ModelAdmin):
-    list_display=('id', 'pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi','latitude','longitude','slug')
+    list_display=('id', 'pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi','latitude','longitude', 'tanggal_tanam', 'tanggal_panen', 'progress_tanam','slug')
     prepopulated_fields = {"slug": ("pemilik",)} 
     
 @admin.register(DataERDKK)

@@ -163,6 +163,8 @@ class Lahan(models.Model):
     lokasi = models.CharField(max_length=100)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    tanggal_tanam = models.DateField(null=True, blank=True)
+    tanggal_panen = models.DateField(null=True, blank=True)
     created_at = models.DateField(default=timezone.now) 
     slug = models.SlugField(max_length=200,null=True,blank=True, unique=True)
     class Meta:
@@ -173,8 +175,18 @@ class Lahan(models.Model):
     
     def save(self, *args, **kwargs):  # new 
         if not self.slug: 
-            self.slug = slugify(self.luas) 
+            self.slug = slugify(self.pemilik) 
         return super().save(*args, **kwargs)
+    
+    @property
+    def progress_tanam(self):
+        if self.tanggal_tanam and self.tanggal_panen:
+            total_days = (self.tanggal_panen - self.tanggal_tanam).days
+            passed_days = (timezone.now().date() - self.tanggal_tanam).days
+            if total_days > 0:
+                progress = min(100, max(0, int((passed_days / total_days) * 100)))
+                return progress
+        return 0
     
 class DataERDKK(models.Model):
     JENIS_PUPUK_CHOICES = [

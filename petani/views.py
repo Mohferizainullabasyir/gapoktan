@@ -177,6 +177,8 @@ def tambah_lahan(request):
         lokasi = request.POST.get('lokasi')
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
+        tanggal_tanam = request.POST.get('tanggal_tanam')
+        tanggal_panen = request.POST.get('tanggal_panen')
 
         try:
             pemilik_obj = Petani.objects.get(id=pemilik_id)
@@ -191,6 +193,8 @@ def tambah_lahan(request):
             lokasi=lokasi,
             latitude=latitude,
             longitude=longitude,
+            tanggal_tanam=tanggal_tanam,
+            tanggal_panen=tanggal_panen
         )
         return redirect('lahan')
 

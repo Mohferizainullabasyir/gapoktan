@@ -44,7 +44,7 @@
             {% endif %}
         </form>
 
-        {% if lahan %}
+       {% if lahan %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for row in lahan %}
             <div
@@ -56,13 +56,14 @@
                 <p class="text-green-700">Luas: {{ row.luas }}</p>
                 <p class="text-green-700">Jenis: {{ row.jenis_tanaman }}</p>
                 <p class="text-green-700">Lokasi: {{ row.lokasi|safe }}</p>
+                <p class="text-green-700 font-semibold">Progress Panen: {{ row.progress_tanam }}%</p>
             </div>
             {% endfor %}
         </div>
         {% else %}
         <p class="text-center text-gray-600 mt-10">Data lahan belum tersedia.</p>
         {% endif %}
-    </div>
+
 
     <!-- Step 2: Form Tambah -->
     <div x-show="step === 2" x-transition class="bg-white p-6 rounded-lg shadow-md max-w-full mx-auto">
@@ -88,7 +89,8 @@
                 required>
             <input type="text" name="latitude" placeholder="Latitude" class="w-full mb-3 border p-2 rounded-lg shadow" required>
             <input type="text" name="longitude" placeholder="Longitude" class="w-full mb-3 border p-2 rounded-lg shadow" required>
-                
+            <input type="date" name="tanggal_tanam" placeholder="Tanggal panen" class="w-full mb-3 border p-2 rounded-lg shadow" required>
+            <input type="date" name="tanggal_panen" placeholder="Tanggal panen" class="w-full mb-3 border p-2 rounded-lg shadow" required>
             <div class="flex justify-end">
                 <button type="submit"
                     class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Simpan</button>

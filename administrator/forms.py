@@ -257,7 +257,7 @@ class AlsintanForm(forms.ModelForm):
 class LahanForm(forms.ModelForm):
     class Meta:
         model = Lahan
-        fields = ['pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi', 'latitude', 'longitude']
+        fields = ['pemilik', 'gambar_lahan', 'luas', 'jenis_tanaman', 'lokasi', 'latitude', 'longitude','tanggal_tanam','tanggal_panen']
 
         widgets = {
             'pemilik': forms.Select(attrs={
@@ -289,6 +289,14 @@ class LahanForm(forms.ModelForm):
                 'placeholder': 'Longitude (contoh: 113.123456)',
                 'step': 'any',
             }),
+            'tanggal_tanam': forms.DateInput(attrs={
+                'class': 'date-input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'type': 'date',
+            }),
+            'tanggal_panen': forms.DateInput(attrs={
+                'class': 'date-input mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring focus:ring-blue-200',
+                'type': 'date',
+            }),
         }
 
         labels = {
@@ -299,4 +307,6 @@ class LahanForm(forms.ModelForm):
             'lokasi': 'Deskripsi Lokasi',
             'latitude': 'Latitude',
             'longitude': 'Longitude',
+            'tanggal_tanam':'tanggal_tanam',
+            'tanggal_panen':'tanggal_panen',
         }
