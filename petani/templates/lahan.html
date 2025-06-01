@@ -5,7 +5,6 @@
 <!-- ALPINE.JS CONTAINER -->
 <div x-data="{ step: 1, openIndex: null, images: [] }"
      class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen">
-<div x-data="imageModal()" x-show="step === 1" x-transition class="p-6 max-w-7xl mx-auto w-full">
 
     <!-- Header Mobile -->
     <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
@@ -100,7 +99,7 @@
                         </p>
                     </div>
                     <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                        {{ row.luas }} 
+                        {{ row.luas }} ha
                     </span>
                 </div>
                 
@@ -258,8 +257,6 @@
     </script>
     
     <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyRSTjJmBylC2ofKL2zXe2c8Q6uV9d6pQ&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0kzhoW5mY-0PZJRl02IJnbkktMdgqI6k&callback=initMap"
     async defer></script>
-
-    
 {% endblock content %}

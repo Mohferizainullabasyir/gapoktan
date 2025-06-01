@@ -23,4 +23,7 @@ urlpatterns = [
     path('forum/', views.daftar_forum, name='daftar_forum'),
     path('forum/<int:forum_id>/', views.detail_forum, name='detail_forum'),
     path('forum/buat/', views.buat_forum, name='buat_forum'),
+    
+    
+
 ]

@@ -55,6 +55,7 @@ urlpatterns = [
     path('form-lahan/', views.formlahanadmin, name='formlahanadmin'),
     path('edit-lahan/<str:pk>', views.editlahanadmin, name='editlahanadmin'),
     path('delete-lahan/<str:pk>', views.deletelahanadmin, name='deletelahanadmin'),
+    
 
 
 ]
