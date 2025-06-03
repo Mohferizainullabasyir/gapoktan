@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'administrator',
     'ketua',
     'petani',
-    'login',
     'ckeditor'
 ]
 

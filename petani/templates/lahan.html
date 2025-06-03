@@ -6,17 +6,6 @@
 <div x-data="{ step: 1, openIndex: null, images: [] }"
      class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen">
 
-    <!-- Header Mobile -->
-    <div class="md:hidden flex justify-between items-center bg-green-800 text-white p-4 rounded-md shadow-md mb-6">
-        <h1 class="text-2xl font-bold mb-6 flex items-center space-x-2">
-            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-8 h-8">
-            <span>GAPOKTAN</span>
-        </h1>
-        <button @click="isSidebarOpen = !isSidebarOpen" class="focus:outline-none">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-
     <!-- Header + Tombol Map -->
     <div class="flex flex-col md:flex-row items-center justify-between mb-8">
         <div class="text-center md:text-left">
@@ -99,7 +88,7 @@
                         </p>
                     </div>
                     <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                        {{ row.luas }} ha
+                        {{ row.luas }} 
                     </span>
                 </div>
                 

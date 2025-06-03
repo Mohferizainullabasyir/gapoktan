@@ -3,18 +3,6 @@
 {% load static %}
 {% block content %}
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-    <!-- Header Mobile -->
-    <div class="md:hidden flex justify-between items-center bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl shadow-lg mb-6">
-        <h1 class="text-xl font-bold flex items-center space-x-2">
-            <img src="{% static 'gambar/logo.png' %}" alt="Logo" class="w-7 h-7">
-            <span>GAPOKTAN</span>
-        </h1>
-        <button @click="isSidebarOpen = !isSidebarOpen" class="p-2 rounded-lg bg-white/10 hover:bg-white/20">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-
     <div class="max-w-4xl mx-auto">
         <!-- Forum Post -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
