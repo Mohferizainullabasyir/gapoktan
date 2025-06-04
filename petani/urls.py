@@ -23,6 +23,8 @@ urlpatterns = [
     path('forum/', views.daftar_forum, name='daftar_forum'),
     path('forum/<int:forum_id>/', views.detail_forum, name='detail_forum'),
     path('forum/buat/', views.buat_forum, name='buat_forum'),
+    path('forum/hapus/<int:pk>/', views.hapus_forum, name='hapus_forum'),
+    path('komentar/hapus/<int:pk>/', views.hapus_komentar, name='hapus_komentar'),
     
     
 

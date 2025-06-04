@@ -3,7 +3,7 @@ from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum, Q
 from administrator.models import (ProfilGapoktan, Kegiatan, Alsintan, Lahan, Grup, KetuaKelompok, KetuaGapoktan, Petani, DataERDKK, KesehatanTanaman, ForumDiskusi, KomentarDiskusi)
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 import json
 from django.urls import reverse
 from django.utils import timezone
@@ -279,3 +279,24 @@ def buat_forum(request):
         form = ForumDiskusiForm()
 
     return render(request, 'buat_forum.html', {'form': form})
+
+def hapus_forum(request, pk):
+    forum = get_object_or_404(ForumDiskusi, pk=pk)
+    if forum.user != request.user:
+        return HttpResponseForbidden("Anda tidak punya izin menghapus diskusi ini.")
+    if request.method == 'POST':
+        forum.delete()
+        return redirect('daftar_forum')
+    # Kalau mau buat konfirmasi via halaman terpisah, bisa ditambahkan.
+    return redirect('detail_forum', pk=pk)
+
+
+def hapus_komentar(request, pk):
+    komentar = get_object_or_404(KomentarDiskusi, pk=pk)
+    if komentar.user != request.user:
+        return HttpResponseForbidden("Anda tidak punya izin menghapus komentar ini.")
+    if request.method == 'POST':
+        forum_id = komentar.forum.id
+        komentar.delete()
+        return redirect('detail_forum', pk=forum_id)
+    return redirect('detail_forum', pk=komentar.forum.id)
