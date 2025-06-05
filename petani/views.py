@@ -1,13 +1,34 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count, Sum, Q
-from administrator.models import (ProfilGapoktan, Kegiatan, Alsintan, Lahan, Grup, KetuaKelompok, KetuaGapoktan, Petani, DataERDKK, KesehatanTanaman, ForumDiskusi, KomentarDiskusi)
+from administrator.models import (ProfilGapoktan, Kegiatan, Alsintan, Lahan, Grup, KetuaKelompok, KetuaGapoktan, Petani, DataERDKK, Sppt, KesehatanTanaman, ForumDiskusi, KomentarDiskusi)
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponseForbidden
 import json
 from django.urls import reverse
 from django.utils import timezone
 from django import forms
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+
+
+@login_required
+def login_view(request):
+    if request.method == 'POST':
+        nik = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, username=nik, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('beranda')  # nama url beranda di urls.py
+        else:
+            messages.error(request, 'NIK atau Password salah.')
+    
+    return render(request, 'login.html')
+
 
 def beranda(request):
     # Data petani per bulan
@@ -209,6 +230,37 @@ def erdkk(request):
         'daftar_erdkk': daftar_erdkk
     }
     return render(request, 'erdkk.html', context)
+
+def ajukan_sppt(request):
+    if request.method == 'POST':
+        nama_petani = request.POST.get('nama_petani')
+        nama_ibu = request.POST.get('nama_ibu')
+
+        fotokopi_ktp = request.FILES.get('fotokopi_ktp')
+        fotokopi_kk = request.FILES.get('fotokopi_kk')
+        fotokopi_sppt = request.FILES.get('fotokopi_sppt')
+
+        if not all([nama_petani, nama_ibu, fotokopi_ktp, fotokopi_kk, fotokopi_sppt]):
+            messages.error(request, "Semua field wajib diisi.")
+            return redirect('erdkk')
+
+        # Optional: cek duplikat berdasarkan nama_petani (kalau perlu)
+        if Sppt.objects.filter(nama_petani=nama_petani).exists():
+            messages.error(request, "Petani ini sudah mengajukan SPPT.")
+            return redirect('erdkk')
+
+        sppt = Sppt.objects.create(
+            nama_petani=nama_petani,
+            nama_ibu=nama_ibu,
+            fotokopi_ktp=fotokopi_ktp,
+            fotokopi_kk=fotokopi_kk,
+            fotokopi_sppt=fotokopi_sppt
+        )
+
+        messages.success(request, "Pengajuan SPPT berhasil dikirim.")
+        return redirect('erdkk')
+
+    return redirect('erdkk')
 
 
 def tanaman(request):

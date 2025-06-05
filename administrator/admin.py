@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Alsintan, Lahan, DataERDKK, KesehatanTanaman,  ForumDiskusi, KomentarDiskusi
+from .models import ProfilGapoktan, Kegiatan, Grup, KetuaKelompok, KetuaGapoktan, Petani, Alsintan, Lahan, DataERDKK, Sppt, KesehatanTanaman,  ForumDiskusi, KomentarDiskusi
 from django.utils.html import format_html
 
 
@@ -62,6 +62,11 @@ class DataERDKKAdmin(admin.ModelAdmin):
     search_fields = ('petani__nama_petani', 'komoditas', 'jenis_pupuk')
     list_filter = ('tahun_rencana', 'jenis_pupuk', 'komoditas')
     prepopulated_fields = {"slug": ("petani",)}
+    
+@admin.register(Sppt)
+class SpptAdmin(admin.ModelAdmin):
+    list_display = ( 'nama_petani','fotokopi_ktp', 'fotokopi_kk', 'fotokopi_sppt', 'nama_ibu', 'tanggal_pengajuan')
+    readonly_fields = ('tanggal_pengajuan',)
     
 @admin.register(KesehatanTanaman)
 class KesehatanTanamanAdmin(admin.ModelAdmin):

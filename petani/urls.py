@@ -17,6 +17,7 @@ urlpatterns = [
     path('lahan', views.lahan, name='lahan'),
     path('lahan/tambah/', views.tambah_lahan, name='tambah_lahan'),
     path('erdkk/', views.erdkk, name='erdkk'),
+    path('ajukan-sppt/', views.ajukan_sppt, name='ajukan_sppt'),
     path('tanaman', views.tanaman, name='tanaman'),
     
     # Forum Diskusi
@@ -27,5 +28,7 @@ urlpatterns = [
     path('komentar/hapus/<int:pk>/', views.hapus_komentar, name='hapus_komentar'),
     
     
+    #login
+    path('login/', views.login_view, name='login'),
 
 ]

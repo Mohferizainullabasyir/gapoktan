@@ -5,10 +5,35 @@
 <div class="flex-1 p-6 bg-gradient-to-br from-green-100 via-blue-200 to-green-300 min-h-screen"
      x-data="{ step: 1, openIndex: null }">
 
+{% if messages %}
+<div class="mb-4">
+    {% for message in messages %}
+    <div 
+        x-data="{ show: true }" 
+        x-init="setTimeout(() => show = false, 3000)" 
+        x-show="show" 
+        x-transition 
+        class="p-4 rounded-lg shadow text-white 
+               {% if message.tags == 'success' %} bg-blue-500 
+               {% elif message.tags == 'error' %} bg-red-500 
+               {% else %} bg-blue-500 {% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 
 <h1 class="text-2xl font-bold mb-6 text-gray-800">Data ERDKK</h1>
 
-<div class="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
+<div class="flex justify-end mb-4">
+    <button @click="step = 2"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition shadow">
+        ➕ Tambah Pengajuan SPPT
+    </button>
+</div>
+
+<div x-show="step === 1" class="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-green-800 text-white">
             <tr>
@@ -39,5 +64,41 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+<!-- FORM PENGAJUAN SPPT -->
+<div x-show="step === 2" x-transition class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto mt-6">
+    <button @click="step = 1" class="mb-4 text-sm text-green-700 hover:text-green-900 flex items-center">
+        ⬅️ Kembali ke daftar
+    </button>
+    <h2 class="text-2xl font-bold text-green-800 mb-6">➕ Ajukan SPPT Baru</h2>
+    <form method="post" enctype="multipart/form-data" action="{% url 'ajukan_sppt' %}">
+    {% csrf_token %}
+
+    <label class="block mb-2 font-semibold text-gray-700">Nama Petani:</label>
+    <input type="text" name="nama_petani" class="w-full mb-4 border p-2 rounded-lg shadow" required>
+
+    <label class="block mb-2 font-semibold text-gray-700">Upload Fotokopi KTP:</label>
+    <input type="file" name="fotokopi_ktp" accept="image/*" class="w-full mb-4 border p-2 rounded-lg shadow" required>
+
+    <label class="block mb-2 font-semibold text-gray-700">Upload Fotokopi KK:</label>
+    <input type="file" name="fotokopi_kk" accept="image/*" class="w-full mb-4 border p-2 rounded-lg shadow" required>
+
+    <label class="block mb-2 font-semibold text-gray-700">Upload Fotokopi SPPT:</label>
+    <input type="file" name="fotokopi_sppt" accept="image/*" class="w-full mb-4 border p-2 rounded-lg shadow" required>
+
+    <label class="block mb-2 font-semibold text-gray-700">Nama Ibu Kandung:</label>
+    <input type="text" name="nama_ibu" class="w-full mb-4 border p-2 rounded-lg shadow" required>
+
+    <div class="flex justify-end">
+        <button type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+            Kirim Pengajuan
+        </button>
+    </div>
+</form>
+
+</div>
+
 </div>
 {% endblock content %}

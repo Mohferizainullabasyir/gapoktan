@@ -217,7 +217,19 @@ class DataERDKK(models.Model):
 
     def __str__(self):
         return f"{self.petani.nama} - {self.komoditas} ({self.tahun_rencana})"
+    
+class Sppt(models.Model):
+    nama_petani = models.CharField(max_length=100, default="Tidak Diketahui")
+    fotokopi_ktp = models.ImageField(upload_to='pengajuan/ktp/')
+    fotokopi_kk = models.ImageField(upload_to='pengajuan/kk/')
+    fotokopi_sppt = models.ImageField(upload_to='pengajuan/sppt/')
+    tanggal_pengajuan = models.DateTimeField(auto_now_add=True)
+    nama_ibu = models.CharField(max_length=100, default="Tidak Diketahui")
 
+    def __str__(self):
+        return f"Pengajuan atas nama {self.nama_petani}"
+    class Meta:
+        verbose_name_plural = "Data Sppt"
 
     
 class KesehatanTanaman(models.Model):

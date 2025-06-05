@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Pengguna</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-semibold text-center text-slate-800 mb-6">Login</h2>
+
+        {% if messages %}
+            <div class="bg-red-100 border border-red-400 text-red-700 text-sm px-4 py-2 rounded mb-4 text-center">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        <form method="post" class="space-y-5">
+            {% csrf_token %}
+
+            <div>
+                <label for="username" class="block text-sm font-medium text-slate-700">NIK</label>
+                <input type="text" name="username" id="username" required
+                    class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+                <input type="password" name="password" id="password" required
+                    class="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
+                    Masuk
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
